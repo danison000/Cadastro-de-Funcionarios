@@ -7,5 +7,5 @@ RUN mvn package
 FROM eclipse-temurin:17-jdk
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
-COPY --from=build /usr/target/cadastro-de-funcionarios-Springboot.jar app.jar
+COPY --from=build /usr/target/Cadastro-de-Funcionarios-Springboot.jar app.jar
 CMD ["java", "-jar", "app.jar"]
