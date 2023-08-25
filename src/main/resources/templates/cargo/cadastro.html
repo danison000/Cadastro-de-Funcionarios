@@ -1,0 +1,231 @@
+<html layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+
+</head>
+
+<body>
+
+    <div layout:fragment="conteudo">
+
+        <div style="margin-left: 20px; margin-top: 15px;">
+
+
+            <div style="width: 100%; display: flex; justify-content: start;">
+
+                <div style="display: flex; align-items: center;">
+
+                    <i class="material-icons"> play_arrow</i>
+                    <span style="font-size: 18px; margin-left: 5px;">Cadastro de Cargos</span>
+                </div>
+            </div>
+            <p></p>
+
+            <div style="width: 100%; height: 100%; display: flex; ">
+
+                <div style="width: 60%;">
+
+                    <form>
+                        <div id="alert" style="width: 100%;"></div>
+
+                        <div class="row">
+
+                            <div class="col">
+                                <label for="exampleInputEmail1">Nome</label>
+                                <input type="text" class="form-control" id="nome" aria-describedby="emailHelp"
+                                    placeholder="Nome do cargo">
+                                <p class="text-danger" id="mensagemNome"> </p>
+                            </div>
+                            <div class="col">
+                                <label for="departamento">Departamento</label>
+                                <select class="form-control" id="departamento">
+
+                                </select>
+                                <p class="text-danger" id="mensagemDepartamento"> </p>
+                            </div>
+                        </div>
+                        <p></p>
+                        <div style="display: flex; justify-content: end;">
+
+                            <button type="button" class="btn btn-primary" onclick="cadastrarCargo()">Cadastrar</button>
+                        </div>
+                    </form>
+
+
+                </div>
+
+
+            </div>
+
+
+            <p></p>
+
+        </div>
+
+        <script>
+
+            function cadastrarCargo() {
+                var nome = document.getElementById('nome').value;
+                var departamentoId = document.getElementById('departamento').value;
+
+                if (departamentoId == "Selecione...") {
+                    departamentoId = null;
+                }
+
+                data = {
+                    nome: nome,
+                    departamentoId: departamentoId
+                }
+                if (validarFormulario()) {
+                    mandarParaBackend(data);
+
+                }
+
+            }
+
+            function validarFormulario() {
+                var nome = document.getElementById('nome');
+                var departamento = document.getElementById('departamento');
+                var valid = true;
+
+                var mensagem = document.getElementById('mensagemNome');
+                if (nome.value.trim() == '' || nome == null) {
+
+                    nome.classList.add("border-danger");
+                    mensagem.textContent = "Digite um nome válido";
+                    mensagem.style.fontSize = "12px";
+
+                    valid = false;
+                }else{
+                    nome.classList.remove("border-danger");
+                    mensagem.textContent = "";
+
+
+                }
+                mensagem = document.getElementById('mensagemDepartamento');
+                if (departamento.value == "Selecione...") {
+                    departamento.classList.add("border-danger");
+                    mensagem.textContent = "Selecione um departamento";
+                    mensagem.style.fontSize = "12px";
+
+                    valid = false;
+                }else{
+                    departamento.classList.remove("border-danger");
+                    mensagem.textContent = "";
+
+                }
+                return valid;
+            }
+
+            function mandarParaBackend(data) {
+
+
+
+                fetch('http://192.168.0.105:8080/api/cargos', {
+                    method: 'POST', // ou outro método HTTP apropriado
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (response.ok) {
+
+                            mostrarMensagem("success", "Cargo cadastrado!");
+                            removerElementos();
+
+
+                        } else {
+                            response.json().then(args => {
+                                console.log(args);
+                                mostrarMensagem("danger", args.message);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                    });
+            }
+
+
+
+            function removerElementos() {
+
+                document.getElementById('nome').value = '';
+                document.getElementById('departamento').selectedIndex = 0;
+
+
+            }
+
+            function mostrarMensagem(opcao, tipo, mensagem) {
+                var alert = document.getElementById("alert");
+
+
+                alert.innerHTML =
+
+                    '<div class="alert alert-' + tipo + ' alert-dismissible fade show" role = "alert">' +
+                    mensagem +
+                    '<button type = "button" class="close" data-dismiss="alert" aria-label="Close">' +
+                    '<span aria-hidden="true">&times;</span></button> </div>'
+
+                    ;
+
+
+            }
+
+
+        </script>
+
+        <script>
+            document.addEventListener("readystatechange", function () {
+                buscarDepartamentos();
+            });
+
+            function buscarDepartamentos() {
+
+                fetch('http://192.168.0.105:8080/api/departamentos')
+                    .then(response => {
+                        if (response.ok) {
+                            response.json().then(departamentos => {
+
+                                adicionarDepartamentos(departamentos);
+                            });
+
+                        } else {
+                            alert("um erro aconteceu ao carregar a página");
+                        }
+
+                    })
+                    .catch(error => {
+
+                        console.error('Erro:', error);
+                    });
+
+            }
+
+            function adicionarDepartamentos(departamentos) {
+                var select = document.getElementById('departamento');
+                select.innerHTML = '';
+                var lin = document.createElement('option')
+                lin.textContent = "Selecione...";
+                lin.selected = true;
+                lin.disabled = true;
+                select.appendChild(lin);
+
+                departamentos.forEach(departamento => {
+
+                    lin = document.createElement('option');
+                    lin.textContent = departamento.nome;
+                    lin.value = departamento.id;
+                    select.appendChild(lin);
+
+                });
+            }
+        </script>
+
+    </div>
+
+</body>
+
+</html>

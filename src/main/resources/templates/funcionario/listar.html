@@ -1,0 +1,747 @@
+<html layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+
+    <div layout:fragment="conteudo" style="width: 100%;">
+
+
+
+
+        <div class="listar-funcionario-box" style="width: 100%;">
+            <div style="width: 100%; display: flex; justify-content: center;">
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-left: 12px; width: 85%; margin-top: 0px;">
+                    <div style="display: flex; align-items: center;">
+
+                        <i class="material-icons"> play_arrow</i>
+                        <span style="font-size: 18px; margin-left: 5px;">Lista de funcionários</span>
+                    </div>
+                    <div>
+
+                        <button class="btn btn-primary" type="button" data-toggle="collapse"
+                            data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                            <div
+                                style="display: flex; height: 30px; width: 100px; align-items: start; justify-content: space-around;">
+                                <div>
+                                    Buscar
+                                </div>
+                                <i class="material-icons">find_in_page</i>
+
+                            </div>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+            <div style="width: 100%; display: flex; justify-content: center;">
+
+
+
+
+                <div style="width: 85%; margin-top: 20px;">
+                    <div>
+                        <div id="alert">
+
+                        </div>
+                        <div class="collapse" id="collapseExample">
+                            <div class="card card-body">
+                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
+                                squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt
+                                sapiente
+                                ea proident.
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <table id="tabela-funcionarios" class="table table-hover">
+                        <thead>
+                            <tr>
+
+                                <th scope="col">Nome</th>
+                                <th scope="col">Cargo</th>
+                                <th scope="col">Salario</th>
+                                <th scope="col">Departamento</th>
+                                <th scope="col">Endereco</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row"></th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Modal editar -->
+        <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Editar Funcionário</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function atualizarFuncionario() {
+
+                if (validarFormulario()) {
+
+                    var id = parseFloat(document.getElementById('id').value);
+
+                    var nome = document.getElementById('nome').value;
+                    var salario = parseFloat(document.getElementById('salario').value.replace(/[^\d,]/g, '').replace(',', '.'));
+                    var cargoId = parseFloat(document.getElementById('cargo').value);
+
+                    var enderecoId = parseFloat(document.getElementById('enderecoId').value);
+
+                    var logradouro = document.getElementById('logradouro').value;
+                    var numero = parseInt(document.getElementById('numero').value);
+                    var bairro = document.getElementById('bairro').value;
+                    var cidade = document.getElementById('cidade').value;
+                    var cep = document.getElementById('cep').value;
+                    var uf = document.getElementById('uf').value;
+
+
+                    if (uf == "Selecione...") {
+                        uf = null;
+                    }
+
+                    var data = {
+
+                        id: id,
+                        nome: nome,
+                        salario: salario,
+                        cargoId: cargoId,
+                        endereco: {
+                            id: enderecoId,
+                            logradouro: logradouro,
+                            numero: numero,
+                            bairro: bairro,
+                            cidade: cidade,
+                            cep: cep,
+                            uf: uf
+                        }
+
+                    };
+
+                    console.log(JSON.stringify(data, null, 5));
+
+
+                    var message;
+                    var alertType;
+
+                    $('#modalEditar').modal('hide');
+                    fetch('http://192.168.0.105:8080/api/funcionarios', {
+                        method: 'PUT', // ou outro método HTTP apropriado
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    })
+                        .then(response => {
+
+
+
+                            if (response.ok) {
+
+                                message = "Funcionário atualizado";
+                                alertType = "alert-success";
+                                listarFuncionarios();
+
+                            } else {
+
+                                message = "Não foi possivel atualizar";
+                                alertType = "alert-danger";
+                            }
+
+                            document.getElementById("alert").innerHTML = message + '  ' + alertType;
+
+
+                            document.getElementById("alert").innerHTML = '<div class="alert ' + alertType + ' alert-dismissible fade show" role="alert"> ' +
+                                '<strong>' + message + '</strong>' +
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                                '<span aria-hidden="true">&times;</span>' +
+                                '</button>  </div>';
+
+
+                        }).catch(error => {
+
+
+                            location.reload(true);
+                        });
+
+
+
+
+
+
+                }
+
+            }
+
+            function validarFormulario() {
+
+                var nome = document.getElementById('nome');
+                var salario = document.getElementById('salario');
+                var cargoId = document.getElementById('cargo');
+                var logradouro = document.getElementById('logradouro');
+                var numero = document.getElementById('numero');
+                var bairro = document.getElementById('bairro');
+                var cidade = document.getElementById('cidade');
+                var cep = document.getElementById('cep');
+                var uf = document.getElementById('uf');
+
+                var valido = true;
+
+                var mensagem = document.getElementById("mensagemNome");
+                if (nome.value == null || nome.value.trim() == "") {
+                    nome.classList.add("border-danger");
+                    mensagem.textContent = "Digite um nome válido";
+                    mensagem.style.fontSize = "12px";
+
+                    valido = false;
+
+                } else {
+
+                    nome.classList.remove("border-danger");
+                    mensagem.textContent = "";
+                }
+
+                mensagem = document.getElementById("mensagemSalario");
+                if (salario.value == null || salario.value.trim() == "") {
+                    salario.classList.add("border-danger");
+                    mensagem.textContent = "Digite um salário válido";
+                    mensagem.style.fontSize = "12px";
+
+                    valido = false;
+
+                } else {
+                    salario.classList.remove("border-danger");
+                    mensagem.textContent = "";
+                }
+
+                mensagem = document.getElementById("mensagemCargo");
+                if (cargoId.value == "Selecione..." || cargoId.value.trim() == "") {
+                    cargoId.classList.add("border-danger");
+                    mensagem.textContent = "Selecione um cargo";
+                    mensagem.style.fontSize = "12px";
+
+                    valido = false;
+
+                } else {
+                    cargoId.classList.remove("border-danger");
+                    mensagem.textContent = "";
+                }
+
+                mensagem = document.getElementById("mensagemLogradouro");
+                if (logradouro.value == null || logradouro.value.trim() == "") {
+                    logradouro.classList.add("border-danger");
+                    mensagem.textContent = "Digite um logradouro";
+                    mensagem.style.fontSize = "12px";
+
+                    valido = false;
+
+                } else {
+                    logradouro.classList.remove("border-danger");
+                    mensagem.textContent = "";
+                }
+
+                mensagem = document.getElementById("mensagemNumero");
+                if (numero.value == null || numero.value.trim() == "") {
+                    numero.classList.add("border-danger");
+                    mensagem.textContent = "Digite um número";
+                    mensagem.style.fontSize = "12px";
+
+                    valido = false;
+
+                } else {
+                    numero.classList.remove("border-danger");
+                    mensagem.textContent = "";
+                }
+
+                mensagem = document.getElementById("mensagemBairro");
+                if (bairro.value == null || bairro.value.trim() == "") {
+                    bairro.classList.add("border-danger");
+                    mensagem.textContent = "Digite um bairro";
+                    mensagem.style.fontSize = "12px";
+
+                    valido = false;
+
+                } else {
+                    bairro.classList.remove("border-danger");
+                    mensagem.textContent = "";
+                }
+
+                mensagem = document.getElementById("mensagemCidade");
+                if (cidade.value == null || cidade.value.trim() == "") {
+                    cidade.classList.add("border-danger");
+                    mensagem.textContent = "Digite o nome da sua cidade";
+                    mensagem.style.fontSize = "12px";
+
+                    valido = false;
+
+                } else {
+                    cidade.classList.remove("border-danger");
+                    mensagem.textContent = "";
+                }
+
+                mensagem = document.getElementById("mensagemCep");
+                if (cep.value == null || cep.value.trim() == "") {
+                    cep.classList.add("border-danger");
+                    mensagem.textContent = "Digite o cep de sua cidade";
+                    mensagem.style.fontSize = "12px";
+
+                    valido = false;
+
+                } else if (cep.value.length < 9) {
+                    cep.classList.remove("border-danger");
+                    mensagem.textContent = "";
+
+                    cep.classList.add("border-danger");
+                    mensagem.textContent = "Deve conter 8 digitos";
+                    mensagem.style.fontSize = "12px";
+
+                    valido = false;
+
+                } else {
+                    cep.classList.remove("border-danger");
+                    mensagem.textContent = "";
+
+                }
+
+                mensagem = document.getElementById("mensagemUf");
+                if (uf.value == "Selecione..." || uf.value.trim() == "") {
+                    uf.classList.add("border-danger");
+                    mensagem.textContent = "Selecione sua UF";
+                    mensagem.style.fontSize = "12px";
+
+                    valido = false;
+
+                } else {
+
+                    uf.classList.remove("border-danger");
+                    mensagem.textContent = "";
+
+                }
+
+                return valido;
+            }
+        </script>
+
+
+        <script>
+
+
+            document.addEventListener("readystatechange", function () {
+                listarFuncionarios();
+            });
+
+
+            function excluirFuncionario(id) {
+
+                var btnExcluir = document.getElementById("botaoExcluir")
+                btnExcluir.name = id;
+            }
+
+            function confirmarExclusao(id) {
+                fetch('http://192.168.0.105:8080/api/funcionarios/' + id,
+                    {
+                        method: 'DELETE'
+                    })
+                    .then(response => {
+
+                        if (response.ok) {
+
+
+                            mostrarMensagem("success", "Funcionario excluído");
+                            listarFuncionarios();
+
+                        } else {
+                            response.json().then(error => {
+                                console.log(error.message);
+                                mostrarMensagem("danger", error.message);
+                            });
+                        }
+
+                    })
+
+
+                    .catch(error => {
+                        // Lida com erros
+                        console.error('Erro:', error);
+                    });
+
+
+
+            }
+            function mostrarMensagem(tipo, mensagem) {
+                var alert = document.getElementById("alert");
+                alert.innerHTML = '';
+                alert.innerHTML =
+
+                    '<div class="alert alert-' + tipo + ' alert-dismissible fade show" role = "alert">' +
+                    mensagem +
+                    '<button type = "button" class="close" data-dismiss="alert" aria-label="Close">' +
+                    '<span aria-hidden="true">&times;</span></button> </div>'
+
+                    ;
+
+
+            }
+            function listarFuncionarios() {
+                // Coloque o código da sua função aqui
+                fetch('http://192.168.0.105:8080/api/funcionarios')
+                    .then(response => response.json()) // Converte a resposta para JSON
+                    .then(data => {
+
+                        funcionarios = data;
+                        rederizarTabela(data);
+
+                    })
+                    .catch(error => {
+                        // Lida com erros
+                        console.error('Erro:', error);
+                    });
+            }
+
+
+
+            function rederizarTabela(data) {
+
+                const table = document.getElementById('tabela-funcionarios');
+                const tbody = table.querySelector('tbody');
+
+                // Limpa o conteúdo atual da tabela
+                tbody.innerHTML = '';
+
+                // Loop pelos dados e cria uma nova linha para cada entrada
+                data.forEach(funcionario => {
+                    const row = document.createElement('tr');
+                    var endereco = (funcionario.endereco.logradouro) + ", " + "Nº " + funcionario.endereco.numero + ", " + funcionario.endereco.bairro + ", " + (funcionario.endereco.complemento || "sem complemento")
+                        + ", " + funcionario.endereco.cidade + "/" + funcionario.endereco.uf + ", cep: " + funcionario.endereco.cep;
+
+                    endereco = endereco.split(',');
+                    row.innerHTML = `
+                     <td id="${funcionario.id}" style="display:none;">${endereco}</td>
+                     <td>${funcionario.nome}</td>
+                     <td>${funcionario.cargoNome}</td>
+                     <td>R$ ${funcionario.salario.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')},00</td >
+                     <td>${funcionario.departamentoNome}</td >
+                     <td> 
+                            <div class="dropdown dropleft">
+                                <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="material-icons">remove_red_eye</i>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="max-width: 800px; max-height:300px">
+                                        <div class="px-3">  ${endereco[0]}, ${endereco[1]}, ${endereco[2]}  </div>
+                                        <div class="px-3">  ${endereco[3]}, ${endereco[4]}, ${endereco[5]}  </div>
+                                    </div>
+                                </button>
+                            </div>
+                     </td>
+                     <td>
+                        <button id = "${funcionario.id}" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalEditar" onclick = "criarFormulárioModal(this.id)">  <i class="material-icons">edit</i></button>
+                        <button id = "${funcionario.id}" onclick="excluirFuncionario(this.id)" type="button" class="btn btn-danger"  data-toggle="modal" data-target="#confirmarExclusao" >  <i class="material-icons">delete</i></button>
+                     </td>
+
+                                           `;
+                    tbody.appendChild(row);
+
+                });
+            }
+
+
+
+
+        </script>
+
+        <script>
+            function adicionarDadosFormulario(id) {
+
+
+                fetch('http://192.168.0.105:8080/api/funcionarios/' + id)
+                    .then(response => {
+                        if (response.ok) {
+                            response.json().then(funcionario => {
+
+                                adicionarDadosCamposFormulario(funcionario);
+                            });
+
+                        } else {
+                            alert("um erro aconteceu ao carregar a página");
+                        }
+
+                    })
+                    .catch(error => {
+
+                        console.error('Erro:', error);
+                    });
+            }
+
+            function adicionarDadosCamposFormulario(funcionario) {
+
+                document.getElementById('id').value = funcionario.id;
+                document.getElementById('nome').value = funcionario.nome;
+                document.getElementById('salario').value = funcionario.salario;
+                document.getElementById(funcionario.cargoId).selected = true;
+                document.getElementById('enderecoId').value = funcionario.endereco.id;
+                document.getElementById('logradouro').value = funcionario.endereco.logradouro;
+                document.getElementById('numero').value = funcionario.endereco.numero;
+                document.getElementById('bairro').value = funcionario.endereco.bairro;
+                document.getElementById('cidade').value = funcionario.endereco.cidade;
+                document.getElementById('cep').value = funcionario.endereco.cep;
+                document.getElementById(funcionario.endereco.uf).selected = true;
+            }
+        </script>
+
+
+
+        <script>
+            function adicionarCargos(cargos) {
+                var select = document.getElementById('cargo');
+                select.innerHTML = '';
+                var lin = document.createElement('option')
+                lin.textContent = "Selecione...";
+                lin.selected = true;
+                lin.disabled = true;
+                select.appendChild(lin);
+
+                cargos.forEach(cargo => {
+
+                    lin = document.createElement('option');
+                    lin.textContent = cargo.nome;
+                    lin.value = cargo.id;
+                    lin.id = cargo.id;
+                    select.appendChild(lin);
+
+                });
+
+            }
+
+            function criarFormulárioModal(id) {
+
+                var modalBody = document.getElementById('modalBody');
+                modalBody.innerHTML = `
+                
+                                    <form style="width: 100%; display: flex; flex-direction: column; align-items: end; margin-right: 100px;">
+                                        <div id='alert' style='width: 95%;'></div>
+                                        <div style='width: 95%;'>
+                                            <div class='col'>
+                                                <input type='text' id='id' style='display: none;'>
+                                            </div>
+                                            <div class='row'>
+                                                <div class='col'>
+                                                    <label for='nome'>Nome</label>
+                                                    <input type='text' id='nome' class='form-control' placeholder='Digite seu nome'>
+                                                    <p class='text-danger' id='mensagemNome'> </p>
+                                                </div>
+                                            </div>
+                                            <p></p>
+                                            <div class='row'>
+                                                <div class='col'>
+                                                    <label for='salario'>Salario</label>
+                                                    <input type='text' id='salario' class='form-control' placeholder='Digite seu salario' />
+                                                    <p class='text-danger' id='mensagemSalario'> </p>
+                                                </div>
+                                                <div class='col'>
+                                                    <label for='cargo'>Cargo</label>
+                                                    <select id='cargo' name='' class='form-control'>
+                                                    </select>
+                                                    <p class='text-danger' id='mensagemCargo'> </p>
+                                                </div>
+                                            </div>
+                                            <p></p>
+                                            <div class='col'>
+                                                <input type='text' id='enderecoId' style='display: none;'>
+                                            </div>
+                                            <div class='row'>
+                                                <div class='col'>
+                                                    <label for='logradouro'>Logradouro</label>
+                                                    <input type='text' id='logradouro' class='form-control' placeholder='Digite sua rua'>
+                                                    <p class='text-danger' id='mensagemLogradouro'> </p>
+                                                </div>
+                                                <div class='col'>
+                                                    <label for='numero'>Número</label>
+                                                    <input type='number' id='numero' class='form-control' placeholder='Digite seu número'>
+                                                    <p class='text-danger' id='mensagemNumero'> </p>
+                                                </div>
+                                            </div>
+                                            <p></p>
+                                            <div class='row'>
+                                                <div class='col'>
+                                                    <label for='bairro'>Bairro</label>
+                                                    <input type='text' id='bairro' class='form-control' placeholder='Digite seu bairro '>
+                                                    <p class='text-danger' id='mensagemBairro'> </p>
+                                                </div>
+                                                <div class='col'>
+                                                    <label for='cidade'>Cidade</label>
+                                                    <input type='text' id='cidade' class='form-control' placeholder='Digite sua cidade'>
+                                                    <p class='text-danger' id='mensagemCidade'> </p>
+                                                </div>
+                                            </div>
+                                            <p></p>
+                                            <div class='row'>
+                                                <div class='col'>
+                                                    <label for='cep'>Cep</label>
+                                                    <input type='text' id='cep' class='form-control' placeholder='Digite seu cep' onkeypress='$(this).mask("00000-000")'>
+                                                    <p class='text-danger' id='mensagemCep'> </p>
+                                                </div>
+                                                <div class='col'>
+                                                    <label for='uf'>UF</label>
+                                                    <select id='uf' name='uf' class='form-control'>
+                                                    </select>
+                                                    <p class='text-danger' id='mensagemUf'> </p>
+                                                </div>
+                                                <p></p>
+                                            </div>
+                                        </div>
+                                        <p></p>
+                                        <div class='modal-footer'>
+                                            <button type='button' class='btn btn-secondary' data-dismiss='modal'>Fechar</button>
+                                            <button type='button' class='btn btn-primary' onclick='atualizarFuncionario()'>Atualizar</button>
+                                        </div>
+                                    </form>`;
+
+
+                // Selecionar o campo de entrada de salário pelo ID
+                var salarioInput = document.getElementById('salario').addEventListener('input', mascaraSalario);
+
+                buscarDados(id);
+
+
+
+
+            }
+
+            function buscarDados(id) {
+
+                buscarCargos(id);
+
+                return true;
+            }
+
+            function buscarCargos(id) {
+
+                fetch('http://192.168.0.105:8080/api/cargos')
+                    .then(response => {
+                        if (response.ok) {
+                            response.json().then(cargos => {
+
+                                adicionarCargos(cargos);
+                                buscarUfs(id);
+                            });
+
+                        } else {
+                            alert("um erro aconteceu ao carregar a página");
+                        }
+
+                    })
+
+
+                    .catch(error => {
+
+                        console.error('Erro:', error);
+                    });
+
+
+
+            }
+            function buscarUfs(id) {
+
+                fetch('http://192.168.0.105:8080/ufs')
+                    .then(response => {
+                        if (response.ok) {
+                            response.json().then(ufs => {
+
+                                adicionarUfs(ufs);
+                                adicionarDadosFormulario(id);
+
+
+                            });
+
+                        } else {
+                            alert("um erro aconteceu ao carregar a página");
+                        }
+
+                    })
+
+
+                    .catch(error => {
+
+                        console.error('Erro:', error);
+                    });
+
+
+            }
+            function adicionarUfs(ufs) {
+                var tagUfs = document.getElementById('uf');
+
+                tagUfs.innerHTML = '';
+
+                var lin = document.createElement('option');
+                lin.disabled = true;
+                lin.selected = true;
+                lin.textContent = "Selecione..."
+                tagUfs.appendChild(lin);
+
+                ufs.forEach(uf => {
+                    lin = document.createElement('option');
+                    lin.textContent = uf;
+                    lin.value = uf;
+                    lin.id = uf;
+                    tagUfs.appendChild(lin);
+                });
+
+
+            }
+
+        </script>
+
+        <!-- mascara salario -->
+        <script>
+            function mascaraSalario(event) {
+                var input = event.target;
+                var value = input.value.replace(/\D/g, ''); // Remove todos os não-dígitos
+
+                // Formata o valor como moeda brasileira
+                var formattedValue = "R$ " + (value / 100).toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+                input.value = formattedValue;
+            }
+
+
+        </script>
+    </div>
+
+</body>
+
+</html>

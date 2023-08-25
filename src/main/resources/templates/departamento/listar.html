@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <div layout:fragment="conteudo">
+
+
+        <div class="listar-funcionario-box" style="width: 100%;">
+            <p></p>
+
+
+
+
+            <div style="width: 100%; justify-content: left; margin-left: 50px; ">
+                <div style="width: 100%; display: flex; justify-content: left;">
+                    <div
+                        style="display: flex;  justify-content: space-between; align-items: center; margin-left: 12px; width: fit-content; margin-top: 0px;">
+                        <div style="display: flex; align-items: center;">
+
+                            <i class="material-icons">play_arrow</i>
+                            <span style="font-size: 18px; margin-left: 5px;">Lista de departamentos</span>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div style="width: 60%; margin-top: 20px;">
+                    <div>
+                        <div id="alert">
+
+                        </div>
+                    </div>
+
+
+                    <table id="tabela-departamentos" class="table table-hover">
+                        <thead>
+                            <tr>
+
+                                <th scope="col">Nome</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row"></th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Modal editar -->
+        <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Editar Departamento</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modalBody">
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <!-- listar departamentos -->
+        <script>
+            document.addEventListener("readystatechange", function () {
+                listarDepartamentos();
+            });
+
+            function listarDepartamentos() {
+                // Coloque o código da sua função aqui
+                fetch('http://192.168.0.105:8080/api/departamentos')
+                    .then(response => response.json()) // Converte a resposta para JSON
+                    .then(data => {
+
+                        funcionarios = data;
+                        rederizarTabela(data);
+
+                    })
+                    .catch(error => {
+                        // Lida com erros
+                        console.error('Erro:', error);
+                    });
+            }
+
+
+            function rederizarTabela(data) {
+
+                const table = document.getElementById('tabela-departamentos');
+                const tbody = table.querySelector('tbody');
+
+                // Limpa o conteúdo atual da tabela
+                tbody.innerHTML = '';
+
+                // Loop pelos dados e cria uma nova linha para cada entrada
+                data.forEach(departamento => {
+                    const row = document.createElement('tr');
+
+                    row.innerHTML = `<td id="${departamento.id}" style="display:none;"></td>
+                                     <td>${departamento.nome}</td>
+                                     <td>
+                                        <button id = "${departamento.id}" type="button" class="btn btn-info" data-toggle="modal" data-target="#modalEditar" onclick = "criarFormularioModal(this.id)"><i class="material-icons">edit</i></button>
+                                        <button id = "${departamento.id}" onclick="excluirDepartamento(this.id)" type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmarExclusao"><i class="material-icons">delete</i></button>
+                                     </td>`;
+                    tbody.appendChild(row);
+
+                });
+            }
+        </script>
+
+        <!-- excluir departamentos -->
+        <script>
+            function excluirDepartamento(id) {
+
+                var btnExcluir = document.getElementById("botaoExcluir")
+                btnExcluir.name = id;
+            }
+
+            function confirmarExclusao(id) {
+
+                console.log(id);
+
+
+                fetch('http://192.168.0.105:8080/api/departamentos/' + id,
+                    {
+                        method: 'DELETE'
+                    })
+                    .then(response => {
+                        
+                        if (response.ok) {
+
+
+                            mostrarMensagem("success", "Departamento excluído");
+                            listarDepartamentos();
+
+                        } else {
+                            response.json().then(error => {
+                                console.log(error.message);
+                                mostrarMensagem("danger", error.message);
+                            });
+                        }
+                    })
+
+
+                    .catch(error => {
+                        // Lida com erros
+                        console.error('Erro:', error);
+                    });
+
+
+
+            }
+
+        </script>
+
+        <!-- Criar Formulario editar departamento -->
+        <script>
+            function criarFormularioModal(id) {
+                var modalBody = document.getElementById('modalBody');
+
+                modalBody.innerHTML = `
+                                    <form>
+                                        <div id="alert" style="width: 100%;"></div>
+                                        <div class='col'>
+                                                <input type='text' id='id' style='display: none;'>
+                                        </div>
+
+                                        <div class="row">
+                                                
+                                            <div class="col">
+                                                <label for="exampleInputEmail1">Nome</label>
+                                                <input type="text" class="form-control" id="nome" aria-describedby="emailHelp"
+                                                    placeholder="Nome do departamento">
+                                                <p class="text-danger" id="mensagemNome"> </p>
+                                            </div>
+                                        </div>
+                                        <p></p>
+                                        <div style="display: flex; justify-content: end;">
+
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="editarDepartamento()">Cadastrar</button>
+                                        </div>
+                                    </form>`
+                    ;
+
+                buscarDepartamento(id);
+
+            }
+
+            function buscarDepartamento(id) {
+
+                fetch('http://192.168.0.105:8080/api/departamentos/' + id)
+                    .then(response => {
+                        if (response.ok) {
+                            response.json().then(departamento => {
+
+                                adicionarDadosCamposFormulario(departamento);
+
+
+                            });
+
+                        } else {
+                            alert("um erro aconteceu ao carregar a página");
+                        }
+
+                    })
+                    .catch(error => {
+
+                        console.error('Erro:', error);
+                    });
+
+            }
+            function adicionarDadosCamposFormulario(departamento) {
+
+                document.getElementById('id').value = departamento.id;
+                document.getElementById('nome').value = departamento.nome;
+
+            }
+        </script>
+
+        <!-- editar departamento -->
+        <script>
+
+            function editarDepartamento() {
+                var id = document.getElementById('id').value;
+                var nome = document.getElementById('nome').value;
+
+                if (validarFormulario()) {
+                    data = {
+                        "id": id,
+                        "nome": nome
+                    }
+
+                    mandarParaBackend(data);
+
+                }
+            }
+
+            function validarFormulario() {
+                var nome = document.getElementById('nome');
+                var valid = true;
+
+                var mensagem = document.getElementById('mensagemNome');
+                if (nome.value.trim() == '' || nome == null) {
+
+                    nome.classList.add("border-danger");
+                    mensagem.textContent = "Digite um nome válido";
+                    mensagem.style.fontSize = "12px";
+
+                    valid = false;
+                } else {
+                    nome.classList.remove("border-danger");
+                    mensagem.textContent = "";
+
+
+                }
+                return valid;
+            }
+
+            function mandarParaBackend(data) {
+
+                $('#modalEditar').modal('hide');
+
+                fetch('http://192.168.0.105:8080/api/departamentos', {
+                    method: 'PUT', // ou outro método HTTP apropriado
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (response.ok) {
+
+                            mostrarMensagem(1, "success", "Departamento Editado!");
+
+                            listarDepartamentos();
+
+
+                        } else {
+                            response.json().then(error => {
+                                console.log(error.message);
+                                mostrarMensagem("danger", error.message);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                    });
+            }
+            function mostrarMensagem(tipo, mensagem) {
+                var alert = document.getElementById("alert");
+                alert.innerHTML = '';
+                alert.innerHTML =
+
+                    '<div class="alert alert-' + tipo + ' alert-dismissible fade show" role = "alert">' +
+                    mensagem +
+                    '<button type = "button" class="close" data-dismiss="alert" aria-label="Close">' +
+                    '<span aria-hidden="true">&times;</span></button> </div>'
+
+                    ;
+
+
+            }
+
+        </script>
+
+
+    </div>
+</body>
+
+</html>

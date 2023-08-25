@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout}">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <div layout:fragment="conteudo">
+        <div>
+            <p></p>
+            <div style="width: 100%; display: flex; justify-content: left;">
+                <div
+                    style="display: flex;  justify-content: space-between; align-items: center; width: fit-content; margin-top: 0px;">
+                    <div style="display: flex; align-items: center;">
+
+                        <i class="material-icons">play_arrow</i>
+                        <span style="font-size: 18px; margin-left: 5px;">Cadastro de departamentos</span>
+                    </div>
+                </div>
+            </div>
+            <p></p>
+
+            <div style="width: 50%;">
+
+                <form>
+                    <div id="alert" style="width: 100%;"></div>
+
+                    <div class="row">
+
+                        <div class="col">
+                            <label for="exampleInputEmail1">Nome</label>
+                            <input type="text" class="form-control" id="nome" aria-describedby="emailHelp"
+                                placeholder="Nome do departamento">
+                            <p class="text-danger" id="mensagemNome"> </p>
+                        </div>
+                    </div>
+                    <p></p>
+                    <div style="display: flex; justify-content: end;">
+
+                        <button type="button" class="btn btn-primary"
+                            onclick="cadastrarDepartamento()">Cadastrar</button>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+
+
+        <!-- cadastrar departamento -->
+        <script>
+
+            function cadastrarDepartamento() {
+                var nome = document.getElementById('nome').value;
+
+
+                if (validarFormulario()) {
+
+                    data = {
+                        nome: nome                       
+                    }
+                    mandarParaBackend(data);
+
+                }
+
+            }
+
+            function validarFormulario() {
+                var nome = document.getElementById('nome');
+                var valid = true;
+
+                var mensagem = document.getElementById('mensagemNome');
+                if (nome.value.trim() == '' || nome == null) {
+
+                    nome.classList.add("border-danger");
+                    mensagem.textContent = "Digite um nome válido";
+                    mensagem.style.fontSize = "12px";
+
+                    valid = false;
+                } else {
+                    nome.classList.remove("border-danger");
+                    mensagem.textContent = "";
+
+
+                }
+                return valid;
+            }
+
+            function mandarParaBackend(data) {
+
+
+
+                fetch('http://192.168.0.105:8080/api/departamentos', {
+                    method: 'POST', // ou outro método HTTP apropriado
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (response.ok) {
+
+                            mostrarMensagem(1, "success", "Departamento cadastrado!");
+                            removerElementos();
+
+
+                        } else {
+                            response.json().then(args => {
+
+                                mostrarMensagem(1, "danger", args.message);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                    });
+            }
+
+
+
+            function removerElementos() {
+
+                document.getElementById('nome').value = '';
+        
+            }
+
+            function mostrarMensagem(opcao, tipo, mensagem) {
+                var alert = document.getElementById("alert");
+
+                if (opcao == 1) {
+                    alert.innerHTML = '';
+                }
+
+
+                alert.innerHTML =
+
+                    '<div class="alert alert-' + tipo + ' alert-dismissible fade show" role = "alert">' +
+                    mensagem +
+                    '<button type = "button" class="close" data-dismiss="alert" aria-label="Close">' +
+                    '<span aria-hidden="true">&times;</span></button> </div>'
+
+                    ;
+
+
+            }
+
+
+        </script>
+
+    </div>
+
+
+
+
+</body>
+
+</html>
