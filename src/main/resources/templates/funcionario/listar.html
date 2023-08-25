@@ -158,7 +158,7 @@
                     var alertType;
 
                     $('#modalEditar').modal('hide');
-                    fetch('http://192.168.0.105:8080/api/funcionarios', {
+                    fetch('https://cadastro-de-funcionarios.onrender.com/api/funcionarios', {
                         method: 'PUT', // ou outro método HTTP apropriado
                         headers: {
                             'Content-Type': 'application/json'
@@ -371,7 +371,7 @@
             }
 
             function confirmarExclusao(id) {
-                fetch('http://192.168.0.105:8080/api/funcionarios/' + id,
+                fetch('https://cadastro-de-funcionarios.onrender.com/api/funcionarios/' + id,
                     {
                         method: 'DELETE'
                     })
@@ -417,7 +417,7 @@
             }
             function listarFuncionarios() {
                 // Coloque o código da sua função aqui
-                fetch('http://192.168.0.105:8080/api/funcionarios')
+                fetch('https://cadastro-de-funcionarios.onrender.com/api/funcionarios')
                     .then(response => response.json()) // Converte a resposta para JSON
                     .then(data => {
 
@@ -485,7 +485,7 @@
             function adicionarDadosFormulario(id) {
 
 
-                fetch('http://192.168.0.105:8080/api/funcionarios/' + id)
+                fetch('https://cadastro-de-funcionarios.onrender.com/api/funcionarios/' + id)
                     .then(response => {
                         if (response.ok) {
                             response.json().then(funcionario => {
@@ -648,7 +648,7 @@
 
             function buscarCargos(id) {
 
-                fetch('http://192.168.0.105:8080/api/cargos')
+                fetch('https://cadastro-de-funcionarios.onrender.com/api/cargos')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(cargos => {
@@ -674,7 +674,7 @@
             }
             function buscarUfs(id) {
 
-                fetch('http://192.168.0.105:8080/ufs')
+                fetch('https://cadastro-de-funcionarios.onrender.com/ufs')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(ufs => {

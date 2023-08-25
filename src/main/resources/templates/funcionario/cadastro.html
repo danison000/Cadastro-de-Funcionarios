@@ -167,7 +167,7 @@
 
                     console.log(JSON.stringify(data, null, 5));
 
-                    fetch('http://192.168.0.105:8080/api/funcionarios', {
+                    fetch('https://cadastro-de-funcionarios.onrender.com/api/funcionarios', {
                         method: 'POST', // ou outro método HTTP apropriado
                         headers: {
                             'Content-Type': 'application/json'
@@ -398,7 +398,7 @@
 
             function buscarCargos() {
 
-                fetch('http://192.168.0.105:8080/api/cargos')
+                fetch('https://cadastro-de-funcionarios.onrender.com/api/cargos')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(cargos => {
@@ -421,7 +421,7 @@
             }
             function buscarUfs() {
 
-                fetch('http://192.168.0.105:8080/ufs')
+                fetch('https://cadastro-de-funcionarios.onrender.com/ufs')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(ufs => {
