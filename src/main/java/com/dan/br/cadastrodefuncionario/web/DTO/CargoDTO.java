@@ -1,4 +1,4 @@
-package com.dan.br.cadastrodefuncionario.DTO;
+package com.dan.br.cadastrodefuncionario.web.DTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

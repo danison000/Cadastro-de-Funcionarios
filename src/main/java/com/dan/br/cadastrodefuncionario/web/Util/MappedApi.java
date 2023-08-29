@@ -1,4 +1,4 @@
-package com.dan.br.cadastrodefuncionario.web.redirects;
+package com.dan.br.cadastrodefuncionario.web.Util;
 
 public enum MappedApi {
 

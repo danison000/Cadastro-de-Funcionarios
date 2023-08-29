@@ -1,14 +1,14 @@
 package com.dan.br.cadastrodefuncionario.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.CustomAutowireConfigurer;
-import org.springframework.http.HttpMethod;
+// import org.springframework.beans.factory.annotation.Autowired;
+// import org.springframework.beans.factory.annotation.CustomAutowireConfigurer;
+// import org.springframework.http.HttpMethod;
 // import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 // import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 // import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 // import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
-import com.dan.br.cadastrodefuncionario.web.redirects.MappedApi;
+//import com.dan.br.cadastrodefuncionario.web.redirects.MappedApi;
 
 /**
  * SecurityConfig

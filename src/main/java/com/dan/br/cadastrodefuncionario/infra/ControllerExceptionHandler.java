@@ -11,7 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.dan.br.cadastrodefuncionario.DTO.ExceptionDto;
+
+import com.dan.br.cadastrodefuncionario.web.DTO.ExceptionDto;
 import com.dan.br.cadastrodefuncionario.web.exeption.CargoDuplicado;
 import com.dan.br.cadastrodefuncionario.web.exeption.FuncionarioNotFound;
 

@@ -7,12 +7,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.dan.br.cadastrodefuncionario.DTO.CargoDTO;
-import com.dan.br.cadastrodefuncionario.DTO.FuncionarioDTO;
 import com.dan.br.cadastrodefuncionario.model.Cargo;
 import com.dan.br.cadastrodefuncionario.model.Funcionario;
 import com.dan.br.cadastrodefuncionario.service.CargoService;
 import com.dan.br.cadastrodefuncionario.service.DepartamentoService;
+import com.dan.br.cadastrodefuncionario.web.DTO.CargoDTO;
+import com.dan.br.cadastrodefuncionario.web.DTO.FuncionarioDTO;
 
 @Component
 public class ConversorImpl implements Conversor {
