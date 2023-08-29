@@ -5,15 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.dan.br.cadastrodefuncionario.DTO.FuncionarioDTO;
 import com.dan.br.cadastrodefuncionario.model.Funcionario;
 import com.dan.br.cadastrodefuncionario.service.FuncionarioService;
@@ -33,7 +25,7 @@ public class FuncionarioController {
     @GetMapping
     public ResponseEntity<?> listarTodos() throws Exception {
 
-        List<FuncionarioDTO> funcionariosDto = funcionarioService.findAll();
+        List<FuncionarioDTO> funcionariosDto = conversor.funcionarioToDto(funcionarioService.findAll());
 
         return ResponseEntity.ok(funcionariosDto);
     }
@@ -47,22 +39,22 @@ public class FuncionarioController {
     }
 
     @GetMapping("/buscar-por-nome")
-    public ResponseEntity<List<Funcionario>> buscarPorNome(@RequestParam("nome") String nome) throws Exception {
+    public ResponseEntity<List<FuncionarioDTO>> buscarPorNome(@RequestParam("nome") String nome) throws Exception {
 
         System.out.println(nome);
         if(nome.isBlank() || nome.isEmpty()) throw new Exception("Digite um nome");
         
-        List<Funcionario> funcionarios = funcionarioService.findByName(nome);
+        List<FuncionarioDTO> funcionariosDto = conversor.funcionarioToDto(funcionarioService.findByName(nome));
 
-        return ResponseEntity.ok(funcionarios);
+        return ResponseEntity.ok(funcionariosDto);
     }
 
      @GetMapping("/buscar-por-cargo")
-    public ResponseEntity<List<Funcionario>> buscarPorCargo(@RequestParam("id") Long id) throws Exception {
+    public ResponseEntity<List<FuncionarioDTO>> buscarPorCargo(@RequestParam("id") Long id) throws Exception {
 
-        List<Funcionario> funcionarios = funcionarioService.findByCargo(id);
+        List<FuncionarioDTO> funcionariosDto = conversor.funcionarioToDto(funcionarioService.findByCargo(id));
 
-        return ResponseEntity.ok(funcionarios);
+        return ResponseEntity.ok(funcionariosDto);
     }
 
     @PostMapping

@@ -17,17 +17,24 @@
 
         <div style="display: flex; margin-top: 10%; justify-content: center; align-items: center;">
             <form method="post" action="http://localhost:8080/login">
+
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Usuario ou senha inválidos!</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
                 <div class="form-group">
                     <label for="exampleInputEmail1">Email address</label>
-                    <input type="text" name="username" class="form-control" id="user"
-                        aria-describedby="emailHelp" placeholder="Enter email">
+                    <input type="text" name="username" class="form-control" id="user" aria-describedby="emailHelp"
+                        placeholder="Enter email">
                     <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
                         else.</small>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Password</label>
-                    <input type="password" name="password" class="form-control" id="password"
-                        placeholder="Password">
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Password">
                 </div>
 
                 <button onclick="logar()" class="btn btn-primary">Entrar</button>
@@ -43,12 +50,12 @@
             var password = document.getElementById('password').value;
 
             data = {
-                'username' : username,
-                'password' : password
+                'username': username,
+                'password': password
             }
 
             fetch('http://localhost:8080/login', {
-                              
+
                 method: 'POST', // ou outro método HTTP apropriado
                 headers: {
                     'Content-Type': 'application/json'
@@ -62,7 +69,7 @@
                     } else {
                         response.json().then(args => {
                             console.log(args);
-                           
+
                         });
                     }
                 })

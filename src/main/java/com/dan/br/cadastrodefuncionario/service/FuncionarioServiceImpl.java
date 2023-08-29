@@ -1,22 +1,17 @@
 package com.dan.br.cadastrodefuncionario.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.dan.br.cadastrodefuncionario.DTO.FuncionarioDTO;
 import com.dan.br.cadastrodefuncionario.model.Funcionario;
 import com.dan.br.cadastrodefuncionario.repository.FuncionarioRepository;
-import com.dan.br.cadastrodefuncionario.web.Converters.ConversorImpl;
+import com.dan.br.cadastrodefuncionario.web.exeption.FuncionarioNotFound;
 
 @Service
 public class FuncionarioServiceImpl implements FuncionarioService {
 
     @Autowired
     private FuncionarioRepository funcionarioRepository;
-
-    @Autowired
-    private ConversorImpl conversor;
 
     @Override
     public void save(Funcionario funcionario) {
@@ -48,14 +43,14 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     @Override
-    public List<FuncionarioDTO> findAll() throws Exception {
+    public List<Funcionario> findAll() throws Exception {
 
-        List<FuncionarioDTO> funcionariosDto = conversor.funcionarioToDto(funcionarioRepository.findAll());
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
 
-        if (funcionariosDto.isEmpty())
-            throw new Exception("Não foi encontrado nenhum Funcionário");
+        if (funcionarios.isEmpty())
+            throw new FuncionarioNotFound("Não foi encontrado nenhum funcionario");
 
-        return funcionariosDto;
+        return funcionarios;
     }
 
     @Override

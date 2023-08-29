@@ -96,7 +96,7 @@
                         if (response.ok) {
 
 
-                            mostrarMensagem("success", "Cargo excluído");
+                            mostrarMensagem("success", "Cargo Editado");
                             listarCargos();
 
                         } else {
@@ -186,6 +186,7 @@
 
 
 
+
                 alert.innerHTML =
 
                     '<div class="alert alert-' + tipo + ' alert-dismissible fade show" role = "alert">' +
@@ -194,7 +195,6 @@
                     '<span aria-hidden="true">&times;</span></button> </div>'
 
                     ;
-
 
             }
 
@@ -340,18 +340,14 @@
                             response.json().then(error => {
 
                                 mostrarMensagem("danger", error.message);
-                                mostrarMensagem
+
 
                             });
 
                         }
 
 
-                        document.getElementById("alert").innerHTML = '<div class="alert ' + alertType + ' alert-dismissible fade show" role="alert"> ' +
-                            '<strong>' + message + '</strong>' +
-                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-                            '<span aria-hidden="true">&times;</span>' +
-                            '</button>  </div>';
+
                     })
 
 
@@ -376,19 +372,37 @@
             function listarCargos() {
                 // Coloque o código da sua função aqui
                 fetch('http://localhost:8080/api/cargos')
-                    .then(response => response.json()) // Converte a resposta para JSON
-                    .then(data => {
+                    .then(response => {
 
-                        funcionarios = data;
-                        rederizarTabela(data);
+                        if (response.ok) {
 
+                            response.json().then(cargos => {
+
+                                rederizarTabela(cargos);
+
+                            })
+                        } else {
+                            response.json().then(response => {
+
+                                if (response.StatusCode == "400") {
+
+                                    limparTabela();
+                                    mostrarMensagem("warning", response.message);
+                                }
+                            })
+
+                        }
                     })
-                    .catch(error => {
-                        // Lida com erros
-                        console.error('Erro:', error);
-                    });
             }
 
+            function limparTabela() {
+                const table = document.getElementById('tabela-cargos');
+                const tbody = table.querySelector('tbody');
+
+                // Limpa o conteúdo atual da tabela
+                tbody.innerHTML = '';
+
+            }
 
             function rederizarTabela(data) {
 
@@ -396,7 +410,7 @@
                 const tbody = table.querySelector('tbody');
 
                 // Limpa o conteúdo atual da tabela
-                tbody.innerHTML = '';
+                limparTabela();
 
                 // Loop pelos dados e cria uma nova linha para cada entrada
                 data.forEach(cargo => {

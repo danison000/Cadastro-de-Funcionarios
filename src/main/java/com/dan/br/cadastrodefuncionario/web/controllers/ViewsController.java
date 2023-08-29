@@ -35,6 +35,12 @@ public class ViewsController {
         return "login";
     }
 
+    @GetMapping("/login-error")
+    public String loginError() {
+
+        return "login-error";
+    }
+
     @GetMapping("/funcionarios")
     public String funcionariosListar() {
 

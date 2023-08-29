@@ -2,7 +2,7 @@ package com.dan.br.cadastrodefuncionario.service;
 
 import java.util.List;
 
-import com.dan.br.cadastrodefuncionario.DTO.FuncionarioDTO;
+
 import com.dan.br.cadastrodefuncionario.model.Funcionario;
 
 public interface FuncionarioService {
@@ -15,7 +15,7 @@ public interface FuncionarioService {
 
     Funcionario findById(Long id) throws Exception;
 
-    List<FuncionarioDTO> findAll() throws Exception;
+    List<Funcionario> findAll() throws Exception;
 
     List<Funcionario> findByName(String nome) throws Exception;
 

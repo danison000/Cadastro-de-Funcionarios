@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html layout:decorate="~{layout}">
 
 <head>
@@ -164,38 +165,35 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(data)
-                    })
-                        .then(response => {
+                    }).then(response => {
+
+                        if (response.ok) {
+
+                            message = "Funcionário atualizado";
+                            alertType = "alert-success";
+                            listarFuncionarios();
+
+                        } else {
+
+                            message = "Não foi possivel atualizar";
+                            alertType = "alert-danger";
+                        }
+
+                        document.getElementById("alert").innerHTML = message + '  ' + alertType;
 
 
-
-                            if (response.ok) {
-
-                                message = "Funcionário atualizado";
-                                alertType = "alert-success";
-                                listarFuncionarios();
-
-                            } else {
-
-                                message = "Não foi possivel atualizar";
-                                alertType = "alert-danger";
-                            }
-
-                            document.getElementById("alert").innerHTML = message + '  ' + alertType;
+                        document.getElementById("alert").innerHTML = '<div class="alert ' + alertType + ' alert-dismissible fade show" role="alert"> ' +
+                            '<strong>' + message + '</strong>' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
+                            '<span aria-hidden="true">&times;</span>' +
+                            '</button>  </div>';
 
 
-                            document.getElementById("alert").innerHTML = '<div class="alert ' + alertType + ' alert-dismissible fade show" role="alert"> ' +
-                                '<strong>' + message + '</strong>' +
-                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +
-                                '<span aria-hidden="true">&times;</span>' +
-                                '</button>  </div>';
+                    }).catch(error => {
 
 
-                        }).catch(error => {
-
-
-                            location.reload(true);
-                        });
+                        location.reload(true);
+                    });
 
 
 
@@ -385,8 +383,17 @@
 
                         } else {
                             response.json().then(error => {
-                                console.log(error.message);
-                                mostrarMensagem("danger", error.message);
+                                console.log(error);
+
+                                if (error.StatusCode == '400') {
+
+                                    window.location.href = "http://localhost:8080/login";
+
+
+                                } else {
+
+                                    mostrarMensagem("danger", error.message);
+                                }
                             });
                         }
 
@@ -394,8 +401,7 @@
 
 
                     .catch(error => {
-                        // Lida com erros
-                        console.error('Erro:', error);
+                        console.error('aaaaaaaaaaaaaaaaaaaaa:', error);
                     });
 
 
@@ -418,19 +424,42 @@
             function listarFuncionarios() {
                 // Coloque o código da sua função aqui
                 fetch('http://localhost:8080/api/funcionarios')
-                    .then(response => response.json()) // Converte a resposta para JSON
-                    .then(data => {
 
-                        funcionarios = data;
-                        rederizarTabela(data);
+                    .then(response => {
 
+                        if (response.ok) {
+
+                            response.json().then(funcionarios => {
+
+                                rederizarTabela(funcionarios);
+
+                            })
+                        } else {
+                            response.json().then(response => {
+
+                                if (response.StatusCode == "400") {
+                                    
+                                    limparTabela();
+                                    mostrarMensagem("warning", response.message);
+                                }
+                            })
+
+                        }     
                     })
-                    .catch(error => {
-                        // Lida com erros
-                        console.error('Erro:', error);
-                    });
+                    .catch (error => {
+                console.log(error);
+                // console.error('Erro:', error);
+            });
             }
 
+            function limparTabela(){
+             
+                const table = document.getElementById('tabela-funcionarios');
+                const tbody = table.querySelector('tbody');
+                // Limpa o conteúdo atual da tabela
+                tbody.innerHTML = '';
+
+            }
 
 
             function rederizarTabela(data) {
@@ -438,8 +467,7 @@
                 const table = document.getElementById('tabela-funcionarios');
                 const tbody = table.querySelector('tbody');
 
-                // Limpa o conteúdo atual da tabela
-                tbody.innerHTML = '';
+               limparTabela();
 
                 // Loop pelos dados e cria uma nova linha para cada entrada
                 data.forEach(funcionario => {

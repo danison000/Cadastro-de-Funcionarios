@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.dan.br.cadastrodefuncionario.DTO.ExceptionDto;
 import com.dan.br.cadastrodefuncionario.web.exeption.CargoDuplicado;
+import com.dan.br.cadastrodefuncionario.web.exeption.FuncionarioNotFound;
 
 /**
  * ControllerExceptionHandler
@@ -33,6 +34,15 @@ public class ControllerExceptionHandler {
     public ResponseEntity<?> violacaoIntegridade(DataIntegrityViolationException e) {
 
         ExceptionDto error = new ExceptionDto("Não foi possível excluir pois possui entidades relacionadas", "400");
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+
+    }
+
+    @ExceptionHandler(FuncionarioNotFound.class)
+    public ResponseEntity<?> funcionarioNotFound(FuncionarioNotFound e) {
+
+        ExceptionDto error = new ExceptionDto(e.getMessage(), "400");
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 

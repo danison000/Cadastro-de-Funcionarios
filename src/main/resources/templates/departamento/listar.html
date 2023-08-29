@@ -92,17 +92,34 @@
             function listarDepartamentos() {
                 // Coloque o código da sua função aqui
                 fetch('http://localhost:8080/api/departamentos')
-                    .then(response => response.json()) // Converte a resposta para JSON
-                    .then(data => {
+                    .then(response => {
 
-                        funcionarios = data;
-                        rederizarTabela(data);
+                        if (response.ok) {
 
+                            response.json().then(departamentos => {
+
+                                rederizarTabela(departamentos);
+
+                            })
+                        } else {
+                            response.json().then(response => {
+
+                                if (response.StatusCode == "400") {
+
+                                    limparTabela();
+                                    mostrarMensagem("warning", response.message);
+                                }
+                            })
+
+                        }
                     })
-                    .catch(error => {
-                        // Lida com erros
-                        console.error('Erro:', error);
-                    });
+            }
+            function limparTabela(){
+                const table = document.getElementById('tabela-departamentos');
+                const tbody = table.querySelector('tbody');
+
+                // Limpa o conteúdo atual da tabela
+                tbody.innerHTML = '';
             }
 
 
@@ -148,7 +165,7 @@
                         method: 'DELETE'
                     })
                     .then(response => {
-                        
+
                         if (response.ok) {
 
 
@@ -293,7 +310,7 @@
                     .then(response => {
                         if (response.ok) {
 
-                            mostrarMensagem(1, "success", "Departamento Editado!");
+                            mostrarMensagem("success", "Departamento Editado!");
 
                             listarDepartamentos();
 
