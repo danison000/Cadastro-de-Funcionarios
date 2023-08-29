@@ -1,6 +1,7 @@
 package com.dan.br.cadastrodefuncionario.web.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -10,51 +11,63 @@ import com.dan.br.cadastrodefuncionario.model.UF;
 @RequestMapping
 public class ViewsController {
 
-    @RequestMapping("/")
+    @GetMapping("/")
     public String redirect() {
 
         return "redirect:/home";
     }
 
-    @RequestMapping("/home")
+    @GetMapping("/home")
     public String home() {
 
         return "home";
     }
 
-    @RequestMapping("/funcionarios")
+    @GetMapping("/logout")
+    public String logout() {
+
+        return "home";
+    }
+
+    @GetMapping("/login")
+    public String login() {
+
+        return "login";
+    }
+
+    @GetMapping("/funcionarios")
     public String funcionariosListar() {
 
         return "funcionario/listar";
     }
 
-    @RequestMapping("/funcionarios/cadastro")
+    @GetMapping("/funcionarios/cadastro")
     public String funcionarioCadastro() {
         return "funcionario/cadastro";
     }
 
-    @RequestMapping("/cargos")
+    @GetMapping("/cargos")
     public String cargoListar() {
         return "cargo/listar";
     }
 
-    @RequestMapping("/cargos/cadastro")
+    @GetMapping("/cargos/cadastro")
     public String cargoCadastro() {
         return "cargo/cadastro";
     }
 
-    @RequestMapping("/departamentos")
+    @GetMapping("/departamentos")
     public String departamentosListar() {
         return "departamento/listar";
     }
 
-    @RequestMapping("/departamentos/cadastrar")
+    @GetMapping("/departamentos/cadastrar")
     public String departamentosCadastro() {
         return "departamento/cadastro";
     }
 
     @ResponseBody
-    @RequestMapping("/ufs")
+    @GetMapping("/ufs")
     public UF[] getUfs() {
 
         return UF.values();

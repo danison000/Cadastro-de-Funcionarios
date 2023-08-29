@@ -18,7 +18,7 @@ import com.dan.br.cadastrodefuncionario.DTO.FuncionarioDTO;
 import com.dan.br.cadastrodefuncionario.model.Funcionario;
 import com.dan.br.cadastrodefuncionario.service.FuncionarioService;
 import com.dan.br.cadastrodefuncionario.web.Converters.Conversor;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/funcionarios")

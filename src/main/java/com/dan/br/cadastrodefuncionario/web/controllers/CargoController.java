@@ -18,7 +18,7 @@ import com.dan.br.cadastrodefuncionario.model.Cargo;
 import com.dan.br.cadastrodefuncionario.service.CargoService;
 import com.dan.br.cadastrodefuncionario.web.Converters.Conversor;
 
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/cargos")

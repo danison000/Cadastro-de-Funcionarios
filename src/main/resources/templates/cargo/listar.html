@@ -85,7 +85,7 @@
 
                 $('#modalEditar').modal('hide');
 
-                fetch('https://cadastro-de-funcionarios.onrender.com/api/cargos', {
+                fetch('http://localhost:8080/api/cargos', {
                     method: 'PUT', // ou outro método HTTP apropriado
                     headers: {
                         'Content-Type': 'application/json'
@@ -156,7 +156,7 @@
 
             function buscarDepartamentos(id) {
 
-                fetch('https://cadastro-de-funcionarios.onrender.com/api/departamentos')
+                fetch('http://localhost:8080/api/departamentos')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(departamentos => {
@@ -282,7 +282,7 @@
             function adicionarDadosFormulario(id) {
 
 
-                fetch('https://cadastro-de-funcionarios.onrender.com/api/cargos/' + id)
+                fetch('http://localhost:8080/api/cargos/' + id)
                     .then(response => {
                         if (response.ok) {
                             response.json().then(cargo => {
@@ -325,7 +325,7 @@
                 console.log(id);
 
 
-                fetch('https://cadastro-de-funcionarios.onrender.com/api/cargos/' + id,
+                fetch('http://localhost:8080/api/cargos/' + id,
                     {
                         method: 'DELETE'
                     })
@@ -375,7 +375,7 @@
 
             function listarCargos() {
                 // Coloque o código da sua função aqui
-                fetch('https://cadastro-de-funcionarios.onrender.com/api/cargos')
+                fetch('http://localhost:8080/api/cargos')
                     .then(response => response.json()) // Converte a resposta para JSON
                     .then(data => {
 

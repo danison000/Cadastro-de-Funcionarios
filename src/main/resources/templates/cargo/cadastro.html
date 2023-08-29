@@ -97,7 +97,7 @@
                     mensagem.style.fontSize = "12px";
 
                     valid = false;
-                }else{
+                } else {
                     nome.classList.remove("border-danger");
                     mensagem.textContent = "";
 
@@ -110,7 +110,7 @@
                     mensagem.style.fontSize = "12px";
 
                     valid = false;
-                }else{
+                } else {
                     departamento.classList.remove("border-danger");
                     mensagem.textContent = "";
 
@@ -122,7 +122,7 @@
 
 
 
-                fetch('https://cadastro-de-funcionarios.onrender.com/api/cargos', {
+                fetch('http://localhost:8080/api/cargos', {
                     method: 'POST', // ou outro método HTTP apropriado
                     headers: {
                         'Content-Type': 'application/json'
@@ -158,10 +158,9 @@
 
             }
 
-            function mostrarMensagem(opcao, tipo, mensagem) {
+            function mostrarMensagem(tipo, mensagem) {
                 var alert = document.getElementById("alert");
-
-
+                alert.innerHTML = '';
                 alert.innerHTML =
 
                     '<div class="alert alert-' + tipo + ' alert-dismissible fade show" role = "alert">' +
@@ -184,7 +183,7 @@
 
             function buscarDepartamentos() {
 
-                fetch('https://cadastro-de-funcionarios.onrender.com/api/departamentos')
+                fetch('http://localhost:8080/api/departamentos')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(departamentos => {

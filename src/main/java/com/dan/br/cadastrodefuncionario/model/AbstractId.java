@@ -2,10 +2,8 @@ package com.dan.br.cadastrodefuncionario.model;
 
 import java.io.Serializable;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
+import javax.persistence.*;
+
 
 @MappedSuperclass
 public abstract class AbstractId<ID extends Serializable> implements Serializable{
