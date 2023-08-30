@@ -28,7 +28,7 @@
                             <div
                                 style="display: flex; height: 30px; width: 100px; align-items: start; justify-content: space-around;">
                                 <div>
-                                    Buscar
+                                    Filtrar
                                 </div>
                                 <i class="material-icons">find_in_page</i>
 
@@ -43,29 +43,40 @@
 
             <div style="width: 100%; display: flex; justify-content: center;">
 
-
-
-
                 <div style="width: 85%; margin-top: 20px;">
-                    <div>
-                        <div id="alert">
+                    <div style="width: 100%;" class="card collapse">
 
-                        </div>
                         <div class="collapse" id="collapseExample">
-                            <div class="card card-body">
-                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
-                                squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt
-                                sapiente
-                                ea proident.
+                            <div class="card-body">
+
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="width: 30%;">
+                                        <divv style="display: block;">
+                                            <div class="input-group mb-3 col">
+                                                <div class="input-group-prepend">
+                                                    <label class="input-group-text" for="inputGroupSelect01">Buscar
+                                                        por</label>
+                                                </div>
+                                                <select class="custom-select" id="inputGroupSelect01">
+                                                    <option selected>Selecione...</option>
+                                                    <option value="Nome">Nome</option>
+                                                    <option value="Departamento">Departamento</option>
+                                                    <option value="Salário">Salário</option>
+                                                </select>
+                                            </div>
+                                    </div>
+
+                                    <div id="parametrosBusca"
+                                        style="margin-left: 5px; width: 70%; display: flex; justify-content: center;">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-
                     <table id="tabela-funcionarios" class="table table-hover">
+                        <div id="alert"></div>
                         <thead>
                             <tr>
-
                                 <th scope="col">Nome</th>
                                 <th scope="col">Cargo</th>
                                 <th scope="col">Salario</th>
@@ -88,6 +99,8 @@
 
         </div>
 
+
+
         <!-- Modal editar -->
         <div class="modal fade" id="modalEditar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
             aria-hidden="true">
@@ -108,6 +121,158 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            const selectElement = document.getElementById('inputGroupSelect01');
+            const campos = document.getElementById('parametrosBusca')
+
+            selectElement.addEventListener('change', function () {
+
+                const selectedValue = selectElement.value;
+
+                if (selectedValue == "Selecione...") {
+
+                    campos.innerHTML = '';
+                }
+
+                if (selectedValue == "Nome") {
+
+
+                    campos.innerHTML = '';
+                    campos.innerHTML = `
+                        <div style="width: 70%; justify-content:center;">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="Digite um nome" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-success" type="button">Buscar</button>
+                                    </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                if (selectedValue == "Departamento") {
+
+
+                    campos.innerHTML = '';
+                    campos.innerHTML = `
+                        <div style="width: 40%; justify-content:center;">
+                            <div class="input-group mb-3">
+
+                                <select class="custom-select" id="departamentos">
+                    
+                                                </select>
+
+
+
+                                <div class="input-group-append">
+                                        <button class="btn btn-outline-success" type="button">Buscar</button>
+                                    </div>
+                            </div>
+                        </div>
+                    `;
+
+                    buscarDepartamentos();
+
+
+
+                }
+
+                if (selectedValue == "Salário") {
+
+
+                    campos.innerHTML = '';
+                    campos.innerHTML = `
+                                <div style="width: 73%; justify-content:center;">
+                                  
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-default">De:</span>
+                                        </div>
+                                        <input type="text" id="salario1" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-default">Até:</span>
+                                        </div>
+                                        <input type="text" id="salario2" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                                        
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-success" type="button">Buscar</button>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+                            `;
+
+                    var salarioInput1 = document.getElementById('salario1');
+                    salarioInput1.addEventListener('input', mascaraSalario);
+
+                    var salarioInput2 = document.getElementById('salario2');
+                    salarioInput2.addEventListener('input', mascaraSalario);
+
+
+                }
+
+
+            });
+
+            function buscarDepartamentos() {
+
+                fetch('http://localhost:8080/api/departamentos')
+                    .then(response => {
+                        if (response.ok) {
+                            response.json().then(departamentos => {
+
+                                adicionarDepartamentos(departamentos);
+                            });
+
+                        }
+                    })
+                    .catch(error => {
+                    });
+            }
+
+            function adicionarDepartamentos(departamentos) {
+                var select = document.getElementById('departamentos');
+                select.innerHTML = '';
+                var lin = document.createElement('option')
+                lin.textContent = "Selecione...";
+                lin.selected = true;
+                lin.disabled = true;
+                select.appendChild(lin);
+
+                departamentos.forEach(departamento => {
+
+                    lin = document.createElement('option');
+                    lin.textContent = departamento.nome;
+                    lin.value = departamento.id;
+                    select.appendChild(lin);
+                });
+            }
+
+            function mascaraSalario(event) {
+                var input = event.target;
+                var value = input.value.replace(/\D/g, ''); // Remove todos os não-dígitos
+
+                // Formata o valor como moeda brasileira
+                var formattedValue = "R$ " + (value / 100).toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+                input.value = formattedValue;
+            }
+
+
+
+
+
+
+        </script>
+
+
 
         <script>
             function atualizarFuncionario() {
@@ -438,22 +603,22 @@
                             response.json().then(response => {
 
                                 if (response.StatusCode == "400") {
-                                    
+
                                     limparTabela();
                                     mostrarMensagem("warning", response.message);
                                 }
                             })
 
-                        }     
+                        }
                     })
-                    .catch (error => {
-                console.log(error);
-                // console.error('Erro:', error);
-            });
+                    .catch(error => {
+                        console.log(error);
+                        // console.error('Erro:', error);
+                    });
             }
 
-            function limparTabela(){
-             
+            function limparTabela() {
+
                 const table = document.getElementById('tabela-funcionarios');
                 const tbody = table.querySelector('tbody');
                 // Limpa o conteúdo atual da tabela
@@ -467,7 +632,7 @@
                 const table = document.getElementById('tabela-funcionarios');
                 const tbody = table.querySelector('tbody');
 
-               limparTabela();
+                limparTabela();
 
                 // Loop pelos dados e cria uma nova linha para cada entrada
                 data.forEach(funcionario => {
