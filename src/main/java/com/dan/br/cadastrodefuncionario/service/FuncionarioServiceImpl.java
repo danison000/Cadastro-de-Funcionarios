@@ -1,5 +1,6 @@
 package com.dan.br.cadastrodefuncionario.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,15 +70,28 @@ public class FuncionarioServiceImpl implements FuncionarioService {
     }
 
     @Override
-    public List<Funcionario> findByCargo(Long id) throws Exception {
+    public List<Funcionario> findByDepartamento(Long id) throws Exception {
 
-        List<Funcionario> funcionarios = funcionarioRepository.findByCargo(id).get();
+        List<Funcionario> funcionarios = funcionarioRepository.findByDepartamento(id);
 
         if (funcionarios.isEmpty())
-            throw new Exception("Não há funcionario com neste cargo!");
+            throw new Exception("Não há funcionarios neste departamento!");
 
         return funcionarios;
 
+    }
+
+    @Override
+    public List<Funcionario> findBySalario(BigDecimal salario1, BigDecimal salario2) throws Exception {
+
+        System.out.println(salario1+"  "+salario2);
+
+
+        List<Funcionario> funcionarios = funcionarioRepository.findBySalario(salario1, salario2);
+        if (funcionarios.isEmpty())
+            throw new Exception("Não há funcionarios com essa faixa de salário!");
+
+        return funcionarios;
     }
 
 }

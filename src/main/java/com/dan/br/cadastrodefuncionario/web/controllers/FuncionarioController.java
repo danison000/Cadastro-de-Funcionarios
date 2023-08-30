@@ -1,6 +1,6 @@
 package com.dan.br.cadastrodefuncionario.web.controllers;
 
-
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,17 +44,26 @@ public class FuncionarioController {
     public ResponseEntity<List<FuncionarioDTO>> buscarPorNome(@RequestParam("nome") String nome) throws Exception {
 
         System.out.println(nome);
-        if(nome.isBlank() || nome.isEmpty()) throw new Exception("Digite um nome");
-        
+        if (nome.isBlank() || nome.isEmpty())
+            throw new Exception("Digite um nome");
+
         List<FuncionarioDTO> funcionariosDto = conversor.funcionarioToDto(funcionarioService.findByName(nome));
 
         return ResponseEntity.ok(funcionariosDto);
     }
 
-     @GetMapping("/buscar-por-cargo")
-    public ResponseEntity<List<FuncionarioDTO>> buscarPorCargo(@RequestParam("id") Long id) throws Exception {
+    @GetMapping("/buscar-por-departamento")
+    public ResponseEntity<List<FuncionarioDTO>> buscarPorDepartamento(@RequestParam("id") Long id) throws Exception {
 
-        List<FuncionarioDTO> funcionariosDto = conversor.funcionarioToDto(funcionarioService.findByCargo(id));
+        List<FuncionarioDTO> funcionariosDto = conversor.funcionarioToDto(funcionarioService.findByDepartamento(id));
+
+        return ResponseEntity.ok(funcionariosDto);
+    }
+
+    @GetMapping("/buscar-por-salario")
+    public ResponseEntity<List<FuncionarioDTO>> buscarPorSalario(@RequestParam("salario1") BigDecimal salario1, @RequestParam("salario2") BigDecimal salario2) throws Exception {
+
+        List<FuncionarioDTO> funcionariosDto = conversor.funcionarioToDto(funcionarioService.findBySalario(salario1, salario2));
 
         return ResponseEntity.ok(funcionariosDto);
     }

@@ -1,9 +1,11 @@
 package com.dan.br.cadastrodefuncionario.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
 import com.dan.br.cadastrodefuncionario.model.Funcionario;
+import com.fasterxml.jackson.core.io.BigDecimalParser;
 
 public interface FuncionarioService {
 
@@ -19,6 +21,8 @@ public interface FuncionarioService {
 
     List<Funcionario> findByName(String nome) throws Exception;
 
-    List<Funcionario> findByCargo(Long id) throws Exception;
+    List<Funcionario> findByDepartamento(Long id) throws Exception;
+
+    List<Funcionario> findBySalario(BigDecimal salario1, BigDecimal salario2) throws Exception;
 
 }
