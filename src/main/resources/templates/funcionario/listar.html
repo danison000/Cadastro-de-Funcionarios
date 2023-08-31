@@ -194,7 +194,7 @@
                                         <input type="text" id="salario2" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
                                         
                                         <div class="input-group-append">
-                                            <button class="btn btn-outline-success" type="button">Buscar</button>
+                                            <button class="btn btn-outline-success" type="button" onclick="buscarPorSalario()">Buscar</button>
                                         </div>
 
                                     </div>
@@ -306,6 +306,34 @@
                                 if (responseMessage.StatusCode == "400") {
 
                                     mostrarMensagem("warning", "Não há funcionários neste departamento")
+                                }
+                            })
+                        }
+                    }).catch(error => { });
+                limparTabela();
+            }
+
+            function buscarPorSalario() {
+
+                var salario1 = parseFloat(document.getElementById('salario1').value.replace(/[^\d,]/g, '').replace(',', '.'));
+                var salario2 = parseFloat(document.getElementById('salario2').value.replace(/[^\d,]/g, '').replace(',', '.'));
+
+                            
+                fetch("http://localhost:8080/api/funcionarios/buscar-por-salario?salario1="+salario1+"&salario2="+salario2)
+                    .then(response => {
+
+                        if (response.ok) {
+
+                            response.json().then(funcionarios => {
+
+                                rederizarTabela(funcionarios);
+                            })
+                        } else {
+
+                            response.json().then(responseMessage => {
+                                if (responseMessage.StatusCode == "400") {
+
+                                    mostrarMensagem("warning", "Não há funcionários com está faixa de salário")
                                 }
                             })
                         }
@@ -612,7 +640,7 @@
 
 
                     .catch(error => {
-                       
+
                     });
 
 

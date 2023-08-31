@@ -5,7 +5,6 @@ import java.util.List;
 
 
 import com.dan.br.cadastrodefuncionario.model.Funcionario;
-import com.fasterxml.jackson.core.io.BigDecimalParser;
 
 public interface FuncionarioService {
 

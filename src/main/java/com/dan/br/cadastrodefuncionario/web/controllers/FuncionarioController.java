@@ -63,6 +63,8 @@ public class FuncionarioController {
     @GetMapping("/buscar-por-salario")
     public ResponseEntity<List<FuncionarioDTO>> buscarPorSalario(@RequestParam("salario1") BigDecimal salario1, @RequestParam("salario2") BigDecimal salario2) throws Exception {
 
+        System.out.println(salario1+"  "+salario2);
+
         List<FuncionarioDTO> funcionariosDto = conversor.funcionarioToDto(funcionarioService.findBySalario(salario1, salario2));
 
         return ResponseEntity.ok(funcionariosDto);
