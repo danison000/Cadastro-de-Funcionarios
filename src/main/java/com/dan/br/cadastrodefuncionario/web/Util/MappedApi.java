@@ -2,21 +2,27 @@ package com.dan.br.cadastrodefuncionario.web.Util;
 
 public enum MappedApi {
 
-    FUNCIONARIOS( "/api/funcionarios"),
-    CARGOS("/api/cargos"),
-    DEPARTAMENTOS("/api/departamentos");
+    FUNCIONARIOS( "/api/funcionarios", "/funcionarios"),
+    CARGOS("/api/cargos", "localhost:8080/cargos"),
+    DEPARTAMENTOS("/api/departamentos", "localhost:8080/departamentos");
 
  
-    private String uri;
+    private String uriOrigin;
+    private String uriRedirect;
 
-    private MappedApi(String uri) {
-     
-        this.uri = uri;
+    private MappedApi(String uri, String url) {
+        this.uriOrigin = url;
+        this.uriRedirect = uri;
     }
 
 
-    public String getUri() {
-        return uri;
+    public String getUriRedirect() {
+        return uriRedirect;
+    }
+
+
+    public String getUrlOrigin() {
+        return uriOrigin;
     }
 
    

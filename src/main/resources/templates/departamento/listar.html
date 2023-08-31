@@ -91,7 +91,7 @@
 
             function listarDepartamentos() {
                 // Coloque o código da sua função aqui
-                fetch('http://localhost:8080/api/departamentos')
+                fetch(host+'/api/departamentos')
                     .then(response => {
 
                         if (response.ok) {

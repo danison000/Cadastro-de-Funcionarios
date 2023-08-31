@@ -167,7 +167,7 @@
 
                     console.log(JSON.stringify(data, null, 5));
 
-                    fetch('http://localhost:8080/api/funcionarios', {
+                    fetch(host+'/api/funcionarios', {
                         method: 'POST', // ou outro método HTTP apropriado
                         headers: {
                             'Content-Type': 'application/json'
@@ -398,7 +398,7 @@
 
             function buscarCargos() {
 
-                fetch('http://localhost:8080/api/cargos')
+                fetch(host+'/api/cargos')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(cargos => {
@@ -418,7 +418,7 @@
             }
             function buscarUfs() {
 
-                fetch('http://localhost:8080/ufs')
+                fetch(host+'/ufs')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(ufs => {

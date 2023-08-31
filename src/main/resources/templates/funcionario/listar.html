@@ -218,7 +218,7 @@
 
             function buscarDepartamentos() {
 
-                fetch('http://localhost:8080/api/departamentos')
+                fetch(host+'/api/departamentos')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(departamentos => {
@@ -266,7 +266,7 @@
             function buscarPorNome() {
 
                 var nomeBusca = document.getElementById('nomeBusca').value;
-                fetch('http://localhost:8080/api/funcionarios/buscar-por-nome?nome=' + nomeBusca)
+                fetch(host+"/api/funcionarios/buscar-por-nome?nome=" + nomeBusca)
                     .then(response => {
 
                         if (response.ok) {
@@ -291,7 +291,7 @@
             function buscarPorDepartamento() {
 
                 var departamentoBusca = document.getElementById('departamentos').value;
-                fetch('http://localhost:8080/api/funcionarios/buscar-por-departamento?id=' + departamentoBusca)
+                fetch(host+"/api/funcionarios/buscar-por-departamento?id=" + departamentoBusca)
                     .then(response => {
 
                         if (response.ok) {
@@ -318,8 +318,8 @@
                 var salario1 = parseFloat(document.getElementById('salario1').value.replace(/[^\d,]/g, '').replace(',', '.'));
                 var salario2 = parseFloat(document.getElementById('salario2').value.replace(/[^\d,]/g, '').replace(',', '.'));
 
-                            
-                fetch("http://localhost:8080/api/funcionarios/buscar-por-salario?salario1="+salario1+"&salario2="+salario2)
+
+                fetch(host+"/api/funcionarios/buscar-por-salario?salario1=" + salario1 + "&salario2=" + salario2)
                     .then(response => {
 
                         if (response.ok) {
@@ -398,7 +398,7 @@
                     var alertType;
 
                     $('#modalEditar').modal('hide');
-                    fetch('http://localhost:8080/api/funcionarios', {
+                    fetch(host+"/api/funcionarios", {
                         method: 'PUT', // ou outro método HTTP apropriado
                         headers: {
                             'Content-Type': 'application/json'
@@ -608,7 +608,7 @@
             }
 
             function confirmarExclusao(id) {
-                fetch('http://localhost:8080/api/funcionarios/' + id,
+                fetch(host+"/api/funcionarios/" + id,
                     {
                         method: 'DELETE'
                     })
@@ -616,36 +616,23 @@
 
                         if (response.ok) {
 
-
                             mostrarMensagem("success", "Funcionario excluído");
                             listarFuncionarios();
-
                         } else {
-                            response.json().then(error => {
-                                console.log(error);
 
-                                if (error.StatusCode == '400') {
+                            console.log(response)
+                            if (response.status == '403' || response.status == '400') {
 
-                                    window.location.href = "http://localhost:8080/login";
+                                window.location.href = host+"/login";
+                            } else {
 
-
-                                } else {
-
-                                    mostrarMensagem("danger", error.message);
-                                }
-                            });
+                                mostrarMensagem("danger", error.message);
+                            }
                         }
-
                     })
-
-
-                    .catch(error => {
-
-                    });
-
-
-
+                    .catch(error => { });
             }
+
             function mostrarMensagem(tipo, mensagem) {
                 var alert = document.getElementById("alert");
                 alert.innerHTML = '';
@@ -660,18 +647,16 @@
 
 
             }
+
             function listarFuncionarios() {
                 // Coloque o código da sua função aqui
-                fetch('http://localhost:8080/api/funcionarios')
-
+                fetch(host+"/api/funcionarios")
                     .then(response => {
 
                         if (response.ok) {
-
                             response.json().then(funcionarios => {
 
                                 rederizarTabela(funcionarios);
-
                             })
                         } else {
                             response.json().then(response => {
@@ -682,7 +667,6 @@
                                     mostrarMensagem("warning", response.message);
                                 }
                             })
-
                         }
                     })
                     .catch(error => {
@@ -752,7 +736,7 @@
             function adicionarDadosFormulario(id) {
 
 
-                fetch('http://localhost:8080/api/funcionarios/' + id)
+                fetch(host+"/api/funcionarios/" + id)
                     .then(response => {
                         if (response.ok) {
                             response.json().then(funcionario => {
@@ -915,7 +899,7 @@
 
             function buscarCargos(id) {
 
-                fetch('http://localhost:8080/api/cargos')
+                fetch(host+"/api/cargos")
                     .then(response => {
                         if (response.ok) {
                             response.json().then(cargos => {
@@ -941,7 +925,7 @@
             }
             function buscarUfs(id) {
 
-                fetch('http://localhost:8080/ufs')
+                fetch(host+"/ufs")
                     .then(response => {
                         if (response.ok) {
                             response.json().then(ufs => {
