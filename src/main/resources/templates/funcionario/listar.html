@@ -391,9 +391,7 @@
 
                     };
 
-                    console.log(JSON.stringify(data, null, 5));
-
-
+                
                     var message;
                     var alertType;
 
@@ -620,7 +618,6 @@
                             listarFuncionarios();
                         } else {
 
-                            console.log(response)
                             if (response.status == '403' || response.status == '400') {
 
                                 window.location.href = host+"/login";
@@ -735,6 +732,7 @@
         <script>
             function adicionarDadosFormulario(id) {
 
+           
 
                 fetch(host+"/api/funcionarios/" + id)
                     .then(response => {

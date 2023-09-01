@@ -165,7 +165,7 @@
 
                     };
 
-                    console.log(JSON.stringify(data, null, 5));
+                   
 
                     fetch(host+'/api/funcionarios', {
                         method: 'POST', // ou outro método HTTP apropriado
@@ -386,7 +386,6 @@
                     lin.value = cargo.id;
                     lin.id = cargo.id;
                     select.appendChild(lin);
-                    console.log(cargo.id);
 
                 });
 

@@ -305,9 +305,6 @@
 
                 document.getElementById('id').value = cargo.id;
                 document.getElementById('nome').value = cargo.nome;
-
-                console.log(cargo.departamento.id);
-
                 document.getElementById(cargo.departamento.id).selected = true;
 
             }
@@ -321,9 +318,6 @@
             }
 
             function confirmarExclusao(id) {
-
-                console.log(id);
-
 
                 fetch(host+'/api/cargos/' + id,
                     {
@@ -339,15 +333,12 @@
                         } else {
                             response.json().then(error => {
 
-                                mostrarMensagem("danger", error);
+                                mostrarMensagem("danger", error.message);
 
 
                             });
 
                         }
-
-
-
                     })
 
 

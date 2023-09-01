@@ -157,7 +157,7 @@
 
             function confirmarExclusao(id) {
 
-                console.log(id);
+             
 
 
                 fetch('http://localhost:8080/api/departamentos/' + id,
@@ -174,7 +174,7 @@
 
                         } else {
                             response.json().then(error => {
-                                console.log(error.message);
+                             
                                 mostrarMensagem("danger", error.message);
                             });
                         }
@@ -317,7 +317,7 @@
 
                         } else {
                             response.json().then(error => {
-                                console.log(error.message);
+                        
                                 mostrarMensagem("danger", error.message);
                             });
                         }
