@@ -22,10 +22,7 @@ public class CargoDTO {
     public void setDepartamentoNome(String departamentoNome) {
         this.departamentoNome = departamentoNome;
     }
-
-    
-    
-    
+  
     public Long getId() {
         return id;
     }

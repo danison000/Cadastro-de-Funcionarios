@@ -218,7 +218,7 @@
 
             function buscarDepartamentos() {
 
-                fetch(host+'/api/departamentos')
+                fetch(host + '/api/departamentos')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(departamentos => {
@@ -266,7 +266,7 @@
             function buscarPorNome() {
 
                 var nomeBusca = document.getElementById('nomeBusca').value;
-                fetch(host+"/api/funcionarios/buscar-por-nome?nome=" + nomeBusca)
+                fetch(host + "/api/funcionarios/buscar-por-nome?nome=" + nomeBusca)
                     .then(response => {
 
                         if (response.ok) {
@@ -291,7 +291,7 @@
             function buscarPorDepartamento() {
 
                 var departamentoBusca = document.getElementById('departamentos').value;
-                fetch(host+"/api/funcionarios/buscar-por-departamento?id=" + departamentoBusca)
+                fetch(host + "/api/funcionarios/buscar-por-departamento?id=" + departamentoBusca)
                     .then(response => {
 
                         if (response.ok) {
@@ -319,7 +319,7 @@
                 var salario2 = parseFloat(document.getElementById('salario2').value.replace(/[^\d,]/g, '').replace(',', '.'));
 
 
-                fetch(host+"/api/funcionarios/buscar-por-salario?salario1=" + salario1 + "&salario2=" + salario2)
+                fetch(host + "/api/funcionarios/buscar-por-salario?salario1=" + salario1 + "&salario2=" + salario2)
                     .then(response => {
 
                         if (response.ok) {
@@ -391,12 +391,12 @@
 
                     };
 
-                
+
                     var message;
                     var alertType;
 
                     $('#modalEditar').modal('hide');
-                    fetch(host+"/api/funcionarios", {
+                    fetch(host + "/api/funcionarios", {
                         method: 'PUT', // ou outro método HTTP apropriado
                         headers: {
                             'Content-Type': 'application/json'
@@ -606,7 +606,7 @@
             }
 
             function confirmarExclusao(id) {
-                fetch(host+"/api/funcionarios/" + id,
+                fetch(host + "/api/funcionarios/" + id,
                     {
                         method: 'DELETE'
                     })
@@ -618,13 +618,11 @@
                             listarFuncionarios();
                         } else {
 
-                            if (response.status == '403' || response.status == '400') {
+                            response.json().then(responseError => {
 
-                                window.location.href = host+"/login";
-                            } else {
+                                mostrarMensagem("danger", responseError.message);
+                            })
 
-                                mostrarMensagem("danger", error.message);
-                            }
                         }
                     })
                     .catch(error => { });
@@ -647,7 +645,7 @@
 
             function listarFuncionarios() {
                 // Coloque o código da sua função aqui
-                fetch(host+"/api/funcionarios")
+                fetch(host + "/api/funcionarios")
                     .then(response => {
 
                         if (response.ok) {
@@ -732,9 +730,9 @@
         <script>
             function adicionarDadosFormulario(id) {
 
-           
 
-                fetch(host+"/api/funcionarios/" + id)
+
+                fetch(host + "/api/funcionarios/" + id)
                     .then(response => {
                         if (response.ok) {
                             response.json().then(funcionario => {
@@ -897,7 +895,7 @@
 
             function buscarCargos(id) {
 
-                fetch(host+"/api/cargos")
+                fetch(host + "/api/cargos")
                     .then(response => {
                         if (response.ok) {
                             response.json().then(cargos => {
@@ -923,7 +921,7 @@
             }
             function buscarUfs(id) {
 
-                fetch(host+"/ufs")
+                fetch(host + "/ufs")
                     .then(response => {
                         if (response.ok) {
                             response.json().then(ufs => {

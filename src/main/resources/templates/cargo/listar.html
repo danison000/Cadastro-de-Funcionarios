@@ -85,7 +85,7 @@
 
                 $('#modalEditar').modal('hide');
 
-                fetch(host+'/api/cargos', {
+                fetch(host + '/api/cargos', {
                     method: 'PUT', // ou outro método HTTP apropriado
                     headers: {
                         'Content-Type': 'application/json'
@@ -100,10 +100,11 @@
                             listarCargos();
 
                         } else {
-                            response.json().then(error => {
-                                console.log(error.message);
-                                mostrarMensagem("danger", error.message);
-                            });
+
+
+
+                            mostrarMensagem("danger", error.message);
+
                         }
                     })
                     .catch(error => {
@@ -156,7 +157,7 @@
 
             function buscarDepartamentos(id) {
 
-                fetch(host+'/api/departamentos')
+                fetch(host + '/api/departamentos')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(departamentos => {
@@ -282,7 +283,7 @@
             function adicionarDadosFormulario(id) {
 
 
-                fetch(host+'/api/cargos/' + id)
+                fetch(host + '/api/cargos/' + id)
                     .then(response => {
                         if (response.ok) {
                             response.json().then(cargo => {
@@ -319,7 +320,7 @@
 
             function confirmarExclusao(id) {
 
-                fetch(host+'/api/cargos/' + id,
+                fetch(host + '/api/cargos/' + id,
                     {
                         method: 'DELETE'
                     })
@@ -331,13 +332,11 @@
                             listarCargos();
 
                         } else {
-                            response.json().then(error => {
 
-                                mostrarMensagem("danger", error.message);
+                            response.json().then(responseError => {
 
-
-                            });
-
+                                mostrarMensagem("danger", responseError.message);
+                            })
                         }
                     })
 
@@ -362,7 +361,7 @@
 
             function listarCargos() {
                 // Coloque o código da sua função aqui
-                fetch(host+'/api/cargos')
+                fetch(host + '/api/cargos')
                     .then(response => {
 
                         if (response.ok) {

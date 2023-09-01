@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.dan.br.cadastrodefuncionario.model.Funcionario;
 import com.dan.br.cadastrodefuncionario.repository.FuncionarioRepository;
-import com.dan.br.cadastrodefuncionario.web.exeption.FuncionarioNotFound;
 
 @Service
 public class FuncionarioServiceImpl implements FuncionarioService {
@@ -49,7 +48,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         List<Funcionario> funcionarios = funcionarioRepository.findAll();
 
         if (funcionarios.isEmpty())
-            throw new FuncionarioNotFound("Não foi encontrado nenhum funcionario");
+            throw new Exception("Não foi encontrado nenhum funcionario");
 
         return funcionarios;
     }

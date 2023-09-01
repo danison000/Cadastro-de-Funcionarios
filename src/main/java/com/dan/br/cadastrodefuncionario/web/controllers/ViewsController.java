@@ -11,34 +11,11 @@ import com.dan.br.cadastrodefuncionario.model.UF;
 @RequestMapping
 public class ViewsController {
 
-    @GetMapping("/")
-    public String redirect() {
 
-        return "redirect:/home";
-    }
-
-    @GetMapping("/home")
+    @GetMapping({"/home", "/"})
     public String home() {
 
         return "home";
-    }
-
-    @GetMapping("/logout")
-    public String logout() {
-
-        return "home";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-
-        return "login";
-    }
-
-    @GetMapping("/login-error")
-    public String loginError() {
-
-        return "login-error";
     }
 
     @GetMapping("/funcionarios")

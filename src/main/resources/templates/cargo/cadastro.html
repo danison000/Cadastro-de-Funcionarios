@@ -51,16 +51,9 @@
                             <button type="button" class="btn btn-primary" onclick="cadastrarCargo()">Cadastrar</button>
                         </div>
                     </form>
-
-
                 </div>
-
-
             </div>
-
-
             <p></p>
-
         </div>
 
         <script>
@@ -72,16 +65,13 @@
                 if (departamentoId == "Selecione...") {
                     departamentoId = null;
                 }
-
                 data = {
                     nome: nome,
                     departamentoId: departamentoId
                 }
                 if (validarFormulario()) {
                     mandarParaBackend(data);
-
                 }
-
             }
 
             function validarFormulario() {
@@ -100,9 +90,8 @@
                 } else {
                     nome.classList.remove("border-danger");
                     mensagem.textContent = "";
-
-
                 }
+
                 mensagem = document.getElementById('mensagemDepartamento');
                 if (departamento.value == "Selecione...") {
                     departamento.classList.add("border-danger");
@@ -111,18 +100,16 @@
 
                     valid = false;
                 } else {
+
                     departamento.classList.remove("border-danger");
                     mensagem.textContent = "";
-
                 }
                 return valid;
             }
 
             function mandarParaBackend(data) {
 
-
-
-                fetch(host+'/api/cargos', {
+                fetch(host + '/api/cargos', {
                     method: 'POST', // ou outro método HTTP apropriado
                     headers: {
                         'Content-Type': 'application/json'
@@ -134,11 +121,9 @@
 
                             mostrarMensagem("success", "Cargo cadastrado!");
                             removerElementos();
-
-
                         } else {
                             response.json().then(args => {
-                                console.log(args);
+
                                 mostrarMensagem("danger", args.message);
                             });
                         }
@@ -148,14 +133,10 @@
                     });
             }
 
-
-
             function removerElementos() {
 
                 document.getElementById('nome').value = '';
                 document.getElementById('departamento').selectedIndex = 0;
-
-
             }
 
             function mostrarMensagem(tipo, mensagem) {
@@ -169,10 +150,7 @@
                     '<span aria-hidden="true">&times;</span></button> </div>'
 
                     ;
-
-
             }
-
 
         </script>
 
@@ -183,7 +161,7 @@
 
             function buscarDepartamentos() {
 
-                fetch(host+'/api/departamentos')
+                fetch(host + '/api/departamentos')
                     .then(response => {
                         if (response.ok) {
                             response.json().then(departamentos => {

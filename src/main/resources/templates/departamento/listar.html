@@ -91,16 +91,19 @@
 
             function listarDepartamentos() {
                 // Coloque o código da sua função aqui
-                fetch(host+'/api/departamentos')
+                fetch(host + '/api/departamentos')
                     .then(response => {
 
                         if (response.ok) {
+
+
 
                             response.json().then(departamentos => {
 
                                 rederizarTabela(departamentos);
 
                             })
+
                         } else {
                             response.json().then(response => {
 
@@ -113,8 +116,12 @@
 
                         }
                     })
+                    .catch(error => {
+                        // Lida com erros
+                        console.error('Erro:', error);
+                    });
             }
-            function limparTabela(){
+            function limparTabela() {
                 const table = document.getElementById('tabela-departamentos');
                 const tbody = table.querySelector('tbody');
 
@@ -157,10 +164,10 @@
 
             function confirmarExclusao(id) {
 
-             
 
 
-                fetch('http://localhost:8080/api/departamentos/' + id,
+
+                fetch(host + '/api/departamentos/' + id,
                     {
                         method: 'DELETE'
                     })
@@ -173,10 +180,13 @@
                             listarDepartamentos();
 
                         } else {
-                            response.json().then(error => {
-                             
-                                mostrarMensagem("danger", error.message);
-                            });
+
+                            response.json().then(responseError => {
+
+                                mostrarMensagem("danger", responseError.message);
+                            })
+
+
                         }
                     })
 
@@ -228,9 +238,11 @@
 
             function buscarDepartamento(id) {
 
-                fetch('http://localhost:8080/api/departamentos/' + id)
+                fetch(host + '/api/departamentos/' + id)
                     .then(response => {
                         if (response.ok) {
+
+
                             response.json().then(departamento => {
 
                                 adicionarDadosCamposFormulario(departamento);
@@ -300,7 +312,7 @@
 
                 $('#modalEditar').modal('hide');
 
-                fetch('http://localhost:8080/api/departamentos', {
+                fetch(host + '/api/departamentos', {
                     method: 'PUT', // ou outro método HTTP apropriado
                     headers: {
                         'Content-Type': 'application/json'
@@ -316,10 +328,13 @@
 
 
                         } else {
-                            response.json().then(error => {
-                        
-                                mostrarMensagem("danger", error.message);
-                            });
+
+                            response.json().then(responseError => {
+
+                                mostrarMensagem("danger", responseError.message);
+                            })
+
+
                         }
                     })
                     .catch(error => {
